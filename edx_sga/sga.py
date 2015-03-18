@@ -32,7 +32,7 @@ from xblock.fields import DateTime, Scope, String, Float, Integer
 from xblock.fragment import Fragment
 
 from xmodule.util.duedate import get_extended_due_date
-
+from django.conf import settings
 
 log = logging.getLogger(__name__)
 
@@ -477,10 +477,12 @@ class StaffGradedAssignmentXBlock(XBlock):
         return not self.past_due() and self.score is None
 
     def _file_storage_path(self, sha1, filename):
-        path = (
-            '{loc.org}/{loc.course}/{loc.block_type}/{loc.block_id}'
+        #added lms_id to create a unique folder for every instance
+	path = (
+            '{loc.org}-lms_id-{lms_id}/{loc.course}/{loc.block_type}/{loc.block_id}'
             '/{sha1}{ext}'.format(
                 loc=self.location,
+		lms_id=getattr(settings, 'LMS_ID', None),
                 sha1=sha1,
                 ext=os.path.splitext(filename)[1]
             )
