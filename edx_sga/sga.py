@@ -482,7 +482,7 @@ class StaffGradedAssignmentXBlock(XBlock):
             '{loc.org}-lms_id-{lms_id}/{loc.course}/{loc.block_type}/{loc.block_id}'
             '/{sha1}{ext}'.format(
                 loc=self.location,
-		lms_id=getattr(settings, 'LMS_ID', None),
+		lms_id=getattr(settings, 'EDCAST_LMS_ID', None),
                 sha1=sha1,
                 ext=os.path.splitext(filename)[1]
             )
