@@ -19,7 +19,7 @@ from django.core.exceptions import PermissionDenied
 from django.core.files import File
 from django.core.files.storage import default_storage
 from django.template import Context, Template
-
+from django.conf import settings
 from student.models import user_by_anonymous_id
 from submissions import api as submissions_api
 from submissions.models import StudentItem as SubmissionsStudent
@@ -476,9 +476,10 @@ class StaffGradedAssignmentXBlock(XBlock):
 
     def _file_storage_path(self, sha1, filename):
         path = (
-            '{loc.org}/{loc.course}/{loc.block_type}/{loc.block_id}'
+            '{loc.org}-lms_id-{lms_id}/{loc.course}/{loc.block_type}/{loc.block_id}'
             '/{sha1}{ext}'.format(
                 loc=self.location,
+                lms_id=getattr(settings, 'EDCAST_LMS_ID', None),
                 sha1=sha1,
                 ext=os.path.splitext(filename)[1]
             )
